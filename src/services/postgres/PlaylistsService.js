@@ -5,9 +5,10 @@ const NotFoundError = require("../../exceptions/NotFoundError");
 const AuthorizationError = require("../../exceptions/AuthorizationError");
 
 class PlaylistsService {
-  constructor(collaborationsService) {
+  constructor(collaborationsService, cacheService) {
     this._pool = new Pool();
     this._collaborationsService = collaborationsService;
+    this._cacheService = cacheService;
   }
 
   async addPlaylist({ name, owner }) {
@@ -179,22 +180,36 @@ class PlaylistsService {
       ],
     };
 
+    await this._cacheService.delete(`activities:${playlistId}`);
+
     await this._pool.query(query);
   }
 
   async getPlaylistActivities(playlistId) {
-    const query = {
-      text: `SELECT users.username, songs.title, playlist_song_activities.action, playlist_song_activities.time
-             FROM playlist_song_activities
-             LEFT JOIN users ON users.id = playlist_song_activities.user_id
-             LEFT JOIN songs ON songs.id = playlist_song_activities.song_id
-             WHERE playlist_song_activities.playlist_id = $1
-             ORDER BY playlist_song_activities.time ASC`,
-      values: [playlistId],
-    };
-
-    const result = await this._pool.query(query);
-    return result.rows;
+    try {
+      const result = await this._cacheService.get(`activities:${playlistId}`);
+      return { activities: JSON.parse(result), fromCache: true };
+    } catch { 
+      const query = {
+        text: `SELECT users.username, songs.title, playlist_song_activities.action, playlist_song_activities.time
+               FROM playlist_song_activities
+               LEFT JOIN users ON users.id = playlist_song_activities.user_id
+               LEFT JOIN songs ON songs.id = playlist_song_activities.song_id
+               WHERE playlist_song_activities.playlist_id = $1
+               ORDER BY playlist_song_activities.time ASC`,
+        values: [playlistId],
+      };
+  
+      const result = await this._pool.query(query);
+      const activities = result.rows;
+  
+      await this._cacheService.set(
+        `activities:${playlistId}`,
+        JSON.stringify(activities)
+      );
+  
+      return { activities, fromCache: false };
+    }
   }
 }
 

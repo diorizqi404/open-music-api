@@ -1,5 +1,6 @@
 const autoBind = require("auto-bind");
 const NotFoundError = require("../../exceptions/NotFoundError");
+
 class AlbumsHandler {
   constructor(service, albumValidator) {
     this._service = service;
@@ -14,15 +15,13 @@ class AlbumsHandler {
 
     const albumId = await this._service.addAlbum({ name, year });
 
-    const response = h.response({
+    return h.response({
       status: "success",
       message: "Album berhasil ditambahkan",
       data: {
-        albumId: albumId,
+        albumId,
       },
-    });
-    response.code(201);
-    return response;
+    }).code(201);
   }
 
   async getAlbumsHandler() {
@@ -49,7 +48,7 @@ class AlbumsHandler {
           name: album.name,
           year: album.year,
           songs: album.songs,
-          coverUrl: album.coverUrl ? album.coverUrl : null,
+          coverUrl: album.coverUrl || null,
         },
       },
     };
@@ -82,37 +81,23 @@ class AlbumsHandler {
     const { id: userId } = request.auth.credentials;
     const { id: albumId } = request.params;
 
-    console.log(
-      "postLikeHandler called with userId:",
-      userId,
-      "albumId:",
-      albumId
-    ); // Tambahkan log ini untuk debugging
-
     try {
       await this._service.addLike(userId, albumId);
-      return h
-        .response({
-          status: "success",
-          message: "Album berhasil disukai",
-        })
-        .code(201);
+      return h.response({
+        status: "success",
+        message: "Album berhasil disukai",
+      }).code(201);
     } catch (error) {
-      console.log("Error in postLikeHandler:", error.message); // Tambahkan log ini untuk debugging
       if (error instanceof NotFoundError) {
-        return h
-          .response({
-            status: "fail",
-            message: error.message,
-          })
-          .code(404);
-      }
-      return h
-        .response({
+        return h.response({
           status: "fail",
           message: error.message,
-        })
-        .code(400);
+        }).code(404);
+      }
+      return h.response({
+        status: "fail",
+        message: error.message,
+      }).code(400);
     }
   }
 
@@ -127,12 +112,10 @@ class AlbumsHandler {
         message: "Batal menyukai album berhasil",
       };
     } catch (error) {
-      return h
-        .response({
-          status: "fail",
-          message: error.message,
-        })
-        .code(400);
+      return h.response({
+        status: "fail",
+        message: error.message,
+      }).code(400);
     }
   }
 

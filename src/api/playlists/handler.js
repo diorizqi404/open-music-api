@@ -142,15 +142,22 @@ class PlaylistsHandler {
       const { id: playlistId } = request.params;
 
       await this._service.verifyPlaylistAccess(playlistId, credentialId);
-      const activities = await this._service.getPlaylistActivities(playlistId);
+      const { activities, fromCache } = await this._service.getPlaylistActivities(playlistId);
 
-      return {
+      const response = h.response({
         status: "success",
         data: {
           playlistId,
           activities,
         },
-      };
+      });
+  
+      if (fromCache) {
+        response.header("X-Data-Source", "cache");
+      }
+
+      return response;
+      
     } catch (error) {
       return this._handleErrorResponse(error, h);
     }
