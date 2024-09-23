@@ -1,13 +1,10 @@
-const mapDBToModelAlbums = ({
+const mapDBToModelAlbums = ({ id, name, year, cover }) => ({
     id,
     name,
-    year
-}) => ({
-    id,
-    name,
-    year
-});
-
+    year,
+    coverUrl: cover, // Pastikan kolom cover dipetakan ke coverUrl
+  });
+  
 const mapDBToModelSongs = ({
     id,
     title,
