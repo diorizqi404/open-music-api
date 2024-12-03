@@ -18,7 +18,7 @@
     "amqplib": "^0.10.4",
     "auto-bind": "^4.0.0",
     "bcrypt": "^5.1.1",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.4.6",
     "joi": "^17.13.3",
     "nanoid": "^5.0.7",
     "node-pg-migrate": "^7.6.0",

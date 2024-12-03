@@ -8,6 +8,7 @@ const config = {
     },
     redis: {
       host: process.env.REDIS_SERVER,
+      port: process.env.REDIS_PORT,
     },
   }
    

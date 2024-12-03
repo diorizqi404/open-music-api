@@ -68,6 +68,14 @@ const init = async () => {
     },
   });
 
+  server.route({
+    method: 'GET',
+    path: '/',
+    handler: () => {
+      return 'Hello World! This is a OpenMusic API V3 :)'
+    }
+  })
+
   await server.register([
     {
       plugin: Jwt,
@@ -145,7 +153,7 @@ const init = async () => {
       options: {
         service: producerService,
         validator: ExportsValidator,
-        playlistsService: playlistsService, // Tambahkan ini
+        playlistsService: playlistsService,
       },
     },
     {
