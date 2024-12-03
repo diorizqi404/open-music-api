@@ -6,7 +6,16 @@ const AuthorizationError = require("../../exceptions/AuthorizationError");
 
 class PlaylistsService {
   constructor(collaborationsService, cacheService) {
-    this._pool = new Pool();
+    this._pool = new Pool({
+      host: process.env.PGHOST,
+      port: process.env.PGPORT,
+      database: process.env.PGDATABASE,
+      user: process.env.PGUSER,
+      password: process.env.PGPASSWORD,
+      ssl: {
+        rejectUnauthorized: false, // Tambahkan ini jika Anda tidak menggunakan SSL
+      },
+    });
     this._collaborationsService = collaborationsService;
     this._cacheService = cacheService;
   }

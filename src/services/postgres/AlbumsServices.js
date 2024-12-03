@@ -5,7 +5,16 @@ const NotFoundError = require("../../exceptions/NotFoundError");
 
 class AlbumsServices {
   constructor(cacheService) {
-    this._pool = new Pool();
+    this._pool = new Pool({
+      host: process.env.PGHOST,
+      port: process.env.PGPORT,
+      database: process.env.PGDATABASE,
+      user: process.env.PGUSER,
+      password: process.env.PGPASSWORD,
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    });
     this._cacheService = cacheService;
   }
 
