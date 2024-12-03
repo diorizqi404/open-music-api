@@ -18,4 +18,6 @@ exports.up = (pgm) => {
  * @param run {() => void | undefined}
  * @returns {Promise<void> | void}
  */
-exports.down = (pgm) => {};
+exports.down = (pgm) => {
+    pgm.dropConstraint('songs', 'fk_songs.albumId_albums.id');
+};
