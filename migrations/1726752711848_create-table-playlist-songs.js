@@ -8,7 +8,7 @@
  * @returns {Promise<void> | void}
  */
 exports.up = (pgm) => {
-    pgm.createTable('playlist_songs', {
+    pgm.createTable('playlistsongs', {
         id: {
             type: 'VARCHAR(50)',
             primaryKey: true,
