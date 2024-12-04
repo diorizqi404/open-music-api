@@ -3,8 +3,6 @@
 
 This is a Queue Consumer for exporting songs. Only works with OpenMusic API V3. THIS PROJECT IS ONLY USED FOR LEARNING, IT IS FORBIDDEN TO COPY THIS PROJECT TO BE USED AS YOUR SUBMISSION.
 
-#### This main branch is refer to V3 branch but there are new improvements.
-
 ## Table of Contents
 - [Tech Stack](#tech-stack)
 - [Setup & Run the project](#setup--run-the-project)
@@ -41,7 +39,7 @@ This website is built with several tech stacks below:
   npm install
 ```
 
-### 5. Start the server
+### 4. Start the server
 
 ```bash
   npm run start
