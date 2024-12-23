@@ -60,7 +60,7 @@ This website is built with several tech stacks below:
 
 ## Environment Variables
 
-To run this project, you will need to change the following environment variables to your .env file for backend and api.js for frontend.
+To run this project, you will need to change the following environment variables to your .env file.
 
 .env file
 ```bash
